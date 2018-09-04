@@ -63,7 +63,8 @@ VALUES
  replies (question_id, parent_id, replier_id, subject, body)
  VALUES
  (1, NULL, 2, 'Darkness', "I wish I could help you, but I can't see more than the pale glow of my mobile device"),
- (1, 1, 1, "", "");
+ (1, 1, 1, "", ""),
+ (1, 2, 1, "Reply", "To Reply");
  
  INSERT INTO
  question_likes (user_id, question_id)

@@ -54,6 +54,10 @@ class Question
     end
   end
   
+  def followers
+    QuestionFollow.followers_for_question_id(@id)
+  end
+  
 end
 
 class User
@@ -89,6 +93,10 @@ class User
   def authored_replies
     Reply.find_by_user_id(@id)
   end
+  
+  def followed_questions
+    QuestionFollow.followed_questions_for_user_id(@id)
+  end
 
 end
 
@@ -100,7 +108,7 @@ class Reply
     SELECT * FROM replies WHERE id = ?;
     SQL
     return nil if query.first == nil
-    Reply.New(query.first)
+    Reply.new(query.first)
   end
   
   def self.find_by_user_id(user_id)
@@ -126,10 +134,46 @@ class Reply
     @replier_id = options['replier_id']
   end
   
-  def reply
+  def author
+    query = User.find_by_id(@replier_id)
+    "#{query.fname} #{query.lname}"
+  end
+  
+  def question
+    Question.find_by_id(@question_id)
+  end
+  
+  def parent_reply
+    Reply.find_by_id(@parent_id)
+  end
+  
+  def child_replies
+    query = QuestionsDatabase.instance.execute(<<-SQL, @id)
+    SELECT * FROM replies WHERE replies.parent_id = ?;
+    SQL
+    query
   end
 end 
 
+class QuestionFollow
+  def self.followers_for_question_id(question_id)
+    query = QuestionsDatabase.instance.execute(<<-SQL,question_id)
+    SELECT *
+    FROM users
+    JOIN question_follows ON user_id = users.id
+    WHERE question_id = ?;
+    SQL
+  end
+  
+  def self.followed_questions_for_user_id(user_id)
+    query = QuestionsDatabase.instance.execute(<<-SQL,user_id)
+    SELECT *
+    FROM questions
+    JOIN question_follows ON question_id = questions.id
+    WHERE user_id = ?;
+    SQL
+  end
+end
 
 class Like 
   attr_reader :user_id, :question_id
