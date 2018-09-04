@@ -68,11 +68,11 @@ VALUES
  
  INSERT INTO
  question_likes (user_id, question_id)
- VALUES (4, 3);
+ VALUES (4, 3), (2, 3), (4, 1), (1, 3), (3, 3);
  
  INSERT INTO
  question_follows (user_id, question_id)
- VALUES (3, 2);
+ VALUES (3, 2), (1, 2), (1, 4);
  
  INSERT INTO 
  users (fname, lname)
