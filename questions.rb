@@ -11,7 +11,7 @@ class QuestionsDatabase < SQLite3::Database
 end
   
 class Question
-  attr_accessor :title, :author_id, :body
+  attr_accessor :title, :author, :body
   attr_reader :id
   
   def self.most_followed(n)
@@ -32,9 +32,9 @@ class Question
     Question.new(query.first)
   end
   
-  def self.find_by_author_id(author_id)
-    query = QuestionsDatabase.instance.execute(<<-SQL, author_id)
-    SELECT * FROM questions WHERE author_id = ?;
+  def self.find_by_author_id(author)
+    query = QuestionsDatabase.instance.execute(<<-SQL, author)
+    SELECT * FROM questions WHERE author = ?;
     SQL
     query.map {|hash| Question.new(hash)}
   end
@@ -103,6 +103,15 @@ class User
   end
   
   def average_karma
+    total = self.authored_questions.count
+    likes = QuestionsDatabase.instance.execute(<<-SQL,@id)
+    SELECT count(question_id) AS "num likes"
+    FROM question_likes
+    JOIN questions ON question_likes.question_id = questions.id
+    WHERE questions.author = ?
+    SQL
+    # puts likes.first["num likes"]
+    likes.first["num likes"] / total
   end
   
   def liked_questions

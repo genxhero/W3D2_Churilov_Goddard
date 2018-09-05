@@ -57,7 +57,9 @@ VALUES
  ('How does this thing work?', "I can't figure this out, can someone please help me? Anyone but You. Know. WHo", 1),
  ('What have I got in my pocket?', 'Oh bother. It"s dark. I can scarcely tell what is in my waistcoat pocket', 2),
  ('Hiring Practices', 'Seriously, stop assigning villains to the Defense against the Dark Arts department!', 3),
- ('Pizza delivery in the FInancial District', 'Where are we supposed to stop here? It seems every blasted spot is a no stopping zone@', 4);
+ ('Pizza delivery in the FInancial District', 'Where are we supposed to stop here? It seems every blasted spot is a no stopping zone@', 4),
+ ("Fillarus Querious","If that spell worked, then what's on the scroll should appear in the body!",3);
+ 
  
  INSERT INTO 
  replies (question_id, parent_id, replier_id, subject, body)
